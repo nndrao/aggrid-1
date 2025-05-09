@@ -4,13 +4,14 @@ import { AllEnterpriseModule } from 'ag-grid-enterprise';
 import { AgGridReact } from 'ag-grid-react';
 import { DataTableToolbar } from './data-table-toolbar';
 import { useTheme } from '@/components/theme-provider';
+import type { GetContextMenuItemsParams, DefaultMenuItem, MenuItemDef } from 'ag-grid-community';
 
 ModuleRegistry.registerModules([AllEnterpriseModule]);
 
 export interface ColumnDef {
   field: string;
   headerName: string;
-  type?: string;
+  cellDataType?: string;
 }
 
 interface DataTableProps {
@@ -104,7 +105,7 @@ export function DataTable({ columnDefs, dataRow }: DataTableProps) {
     enablePivot: true,
   }), []);
 
-  const getContextMenuItems = useCallback(() => {
+  const getContextMenuItems = useCallback((params: GetContextMenuItemsParams): (DefaultMenuItem | MenuItemDef)[] => {
     return [
       "autoSizeAll",
       "resetColumns",
@@ -127,9 +128,14 @@ export function DataTable({ columnDefs, dataRow }: DataTableProps) {
           rowData={dataRow}
           columnDefs={columnDefs}
           defaultColDef={defaultColDef}
-          enableRangeSelection={true}
-          enableFillHandle={true}
+          cellSelection={{ handle: { mode: 'fill' } }}
           suppressMenuHide={true}
+          dataTypeDefinitions={{
+            string: {
+              baseDataType: 'text',
+              extendsDataType: 'text',
+            },
+          }}
           sideBar={{
             toolPanels: [
               {

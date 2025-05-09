@@ -33,7 +33,7 @@ function inferColumnDefinitions(data: FixedIncomePosition[]): ColumnDef[] {
         .replace(/([A-Z])/g, ' $1') // Add space before capital letters
         .replace(/^./, str => str.toUpperCase()) // Capitalize first letter
         .trim(),
-      type: inferredType,
+      cellDataType: inferredType,
     };
   });
 }
